@@ -1,8 +1,9 @@
 package main
 
 import (
-	"api-gateway/internal/adapter/http"
 	"log"
+
+	"api-gateway/internal/adapter/http"
 
 	"github.com/gin-gonic/gin"
 )
@@ -10,6 +11,8 @@ import (
 func main() {
 	r := gin.Default()
 	router := http.NewRouter()
-	r.Any("/*proxyPath", router) // proxy all to internal router
+	r.Any("/*proxyPath", func(c *gin.Context) {
+		router.HandleContext(c)
+	})
 	log.Fatal(r.Run(":8080"))
 }
